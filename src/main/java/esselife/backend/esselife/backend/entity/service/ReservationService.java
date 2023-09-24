@@ -3,6 +3,7 @@ package esselife.backend.esselife.backend.entity.service;
 import esselife.backend.esselife.backend.entity.Reservation;
 import esselife.backend.esselife.backend.entity.enums.Consultant;
 import esselife.backend.esselife.backend.entity.repository.ReservationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,12 +33,14 @@ public class ReservationService {
     }
 
     public Reservation updateReservation(Long id, Reservation updatedReservation) {
-        Reservation existingReservation = getReservationById(id);
+        Reservation existingReservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Reservation not found with id: " + id));
 
-        existingReservation.setCustomerName(updatedReservation.getCustomerName());
-        existingReservation.setReservationDateTime(updatedReservation.getReservationDateTime());
+
         existingReservation.setConsultant(updatedReservation.getConsultant());
         existingReservation.setReservationCompleted(updatedReservation.isReservationCompleted());
+        existingReservation.setReservationDateTime(updatedReservation.getReservationDateTime());
+        existingReservation.setCustomer(updatedReservation.getCustomer());
 
         return reservationRepository.save(existingReservation);
     }
