@@ -1,23 +1,19 @@
 package esselife.backend.esselife.backend.entity.service;
 
+import org.springframework.stereotype.Service;
 import esselife.backend.esselife.backend.entity.Reservation;
-import esselife.backend.esselife.backend.entity.enums.Consultant;
 import esselife.backend.esselife.backend.entity.repository.ReservationRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ReservationService {
-
     private final ReservationRepository reservationRepository;
-
-    @Autowired
-    public ReservationService(ReservationRepository reservationRepository) {
-        this.reservationRepository = reservationRepository;
-    }
 
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
@@ -25,10 +21,12 @@ public class ReservationService {
 
     public Reservation getReservationById(Long id) {
         return reservationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reservation not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Reservation not found with id: " + id));
     }
 
     public Reservation createReservation(Reservation reservation) {
+        reservation.setReservationDate(LocalDate.now());
+        reservation.setReservationTime(LocalTime.now());
         return reservationRepository.save(reservation);
     }
 
@@ -36,17 +34,16 @@ public class ReservationService {
         Reservation existingReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Reservation not found with id: " + id));
 
-
         existingReservation.setConsultant(updatedReservation.getConsultant());
         existingReservation.setReservationCompleted(updatedReservation.isReservationCompleted());
-        existingReservation.setReservationDateTime(updatedReservation.getReservationDateTime());
+        existingReservation.setReservationDate(updatedReservation.getReservationDate());
+        existingReservation.setReservationTime(updatedReservation.getReservationTime());
         existingReservation.setCustomer(updatedReservation.getCustomer());
 
         return reservationRepository.save(existingReservation);
     }
 
     public void deleteReservation(Long id) {
-        Reservation reservation = getReservationById(id);
-        reservationRepository.delete(reservation);
+        reservationRepository.deleteById(id);
     }
 }

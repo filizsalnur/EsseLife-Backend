@@ -1,4 +1,5 @@
 package esselife.backend.esselife.backend.entity.repository;
+
 import esselife.backend.esselife.backend.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
