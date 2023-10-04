@@ -38,7 +38,8 @@ public class Reservation {
         @JsonBackReference
         private Customer customer;
 
-        public Reservation(Consultant consultant, boolean reservationCompleted, LocalDateTime reservationDateTime, Customer customer) {
+        public Reservation(String customerName ,Consultant consultant, boolean reservationCompleted, LocalDateTime reservationDateTime, Customer customer) {
+                this.customerName = customerName;
                 this.consultant = consultant;
                 this.reservationCompleted = reservationCompleted;
                 this.reservationDateTime = reservationDateTime;

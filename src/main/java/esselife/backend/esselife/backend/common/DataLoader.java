@@ -35,16 +35,16 @@ public class DataLoader implements CommandLineRunner {
         customerRepository.save(customer3);
 
         // Rezervasyonları oluştur ve müşterilere bağla
-        Reservation reservation1 = new Reservation(Consultant.CONSULTANT_A, true, LocalDateTime.now().plusDays(1), customer1);
+        Reservation reservation1 = new Reservation(customer1.getName(),Consultant.CONSULTANT_C, true, LocalDateTime.now().plusDays(1), customer1);
         reservationRepository.save(reservation1);
 
-        Reservation reservation2 = new Reservation(Consultant.CONSULTANT_B, true, LocalDateTime.now().plusDays(2), customer2);
+        Reservation reservation2 = new Reservation(customer2.getName(),Consultant.CONSULTANT_B, true, LocalDateTime.now().plusDays(2), customer2);
         reservationRepository.save(reservation2);
 
-        Reservation reservation3 = new Reservation(Consultant.CONSULTANT_C, true, LocalDateTime.now().plusDays(3), customer3);
+        Reservation reservation3 = new Reservation(customer3.getName(),Consultant.CONSULTANT_C, true, LocalDateTime.now().plusDays(3), customer3);
         reservationRepository.save(reservation3);
 
-        Reservation reservation4 = new Reservation(Consultant.CONSULTANT_A, true, LocalDateTime.now().plusDays(4), customer1);
+        Reservation reservation4 = new Reservation(customer1.getName(),Consultant.CONSULTANT_A, true, LocalDateTime.now().plusDays(4), customer1);
         reservationRepository.save(reservation4);
 
     }
