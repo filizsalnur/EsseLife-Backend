@@ -30,42 +30,70 @@ public class DataLoader implements CommandLineRunner {
         // Veritabanını temizle
         reservationRepository.deleteAll();
         customerRepository.deleteAll();
-        // Müşterileri oluştur
-        Customer customer1 = new Customer("Müşteri 1");
-        customerRepository.save(customer1);
 
-        Customer customer2 = new Customer("Müşteri 2");
-        customerRepository.save(customer2);
+        for (int i = 1; i <= 10; i++) {
+            Customer customer = new Customer("Müşteri " + i);
+            customerRepository.save(customer);
 
-        Customer customer3 = new Customer("Müşteri 3");
-        customerRepository.save(customer3);
+            // Her müşteri için 2 rezervasyon oluştur
+            for (int j = 1; j <= 2; j++) {
+                Consultant consultant;
+                if (i % 3 == 1) {
+                    consultant = Consultant.CONSULTANT_A;
+                } else if (i % 3 == 2) {
+                    consultant = Consultant.CONSULTANT_B;
+                } else {
+                    consultant = Consultant.CONSULTANT_C;
+                }
 
-        // Rezervasyonları oluştur ve müşterilere bağla
-        Reservation reservation1 = new Reservation(customer1.getName(), Consultant.CONSULTANT_A, true, LocalDate.now().plusDays(13), LocalTime.of(14, 0), customer1);
-        reservationRepository.save(reservation1);
+                LocalDate reservationDate = LocalDate.now().plusDays(i * 2 + j);
+                LocalTime reservationTime = LocalTime.of(8 + i, 0).plusMinutes(j * 15);
 
-        Reservation reservation2 = new Reservation(customer1.getName(), Consultant.CONSULTANT_B, true, LocalDate.now().plusDays(2), LocalTime.of(10, 30), customer1);
-        reservationRepository.save(reservation2);
+                Reservation reservation = new Reservation(
+                        customer.getName(),
+                        consultant,
+                        true,
+                        reservationDate,
+                        reservationTime,
+                        customer
+                );
+                reservationRepository.save(reservation);
+            }
 
-        Reservation reservation3 = new Reservation(customer2.getName(), Consultant.CONSULTANT_C, true, LocalDate.now().plusDays(3), LocalTime.of(16, 15), customer2);
-        reservationRepository.save(reservation3);
 
-        Reservation reservation4 = new Reservation(customer2.getName(), Consultant.CONSULTANT_A, true, LocalDate.now().plusDays(4), LocalTime.of(11, 45), customer2);
-        reservationRepository.save(reservation4);
+        }
 
-        Reservation reservation5 = new Reservation(customer3.getName(), Consultant.CONSULTANT_B, true, LocalDate.now().plusDays(5), LocalTime.of(9, 30), customer3);
-        reservationRepository.save(reservation5);
+        for (int i = 1; i <= 10; i++) {
+            int a = i+4;
+            Customer customer = new Customer("Müşteri " + a);
+            customerRepository.save(customer);
 
-        Reservation reservation6 = new Reservation(customer3.getName(), Consultant.CONSULTANT_C, true, LocalDate.now().plusDays(6), LocalTime.of(13, 45), customer3);
-        reservationRepository.save(reservation6);
+            // Her müşteri için 2 rezervasyon oluştur
+            for (int j = 1; j <= 2; j++) {
+                Consultant consultant;
+                if (i % 3 == 1) {
+                    consultant = Consultant.CONSULTANT_C;
+                } else if (i % 3 == 2) {
+                    consultant = Consultant.CONSULTANT_A;
+                } else {
+                    consultant = Consultant.CONSULTANT_B;
+                }
 
-        Reservation reservation7 = new Reservation(customer3.getName(), Consultant.CONSULTANT_A, true, LocalDate.now().plusDays(7), LocalTime.of(15, 0), customer3);
-        reservationRepository.save(reservation7);
+                LocalDate reservationDate = LocalDate.now().plusDays(i * 2 + j);
+                LocalTime reservationTime = LocalTime.of(8 + a, 0).plusMinutes(j * 15);
 
-        Reservation reservation8 = new Reservation(customer3.getName(), Consultant.CONSULTANT_B, true, LocalDate.now().plusDays(7), LocalTime.of(9, 30), customer3);
-        reservationRepository.save(reservation8);
+                Reservation reservation = new Reservation(
+                        customer.getName(),
+                        consultant,
+                        true,
+                        reservationDate,
+                        reservationTime,
+                        customer
+                );
+                reservationRepository.save(reservation);
+            }
 
-        Reservation reservation9 = new Reservation(customer3.getName(), Consultant.CONSULTANT_C, true, LocalDate.now().plusDays(7), LocalTime.of(13, 45), customer3);
-        reservationRepository.save(reservation9);
+
+        }
     }
 }
