@@ -25,8 +25,6 @@ public class ReservationService {
     }
 
     public Reservation createReservation(Reservation reservation) {
-        reservation.setReservationDate(LocalDate.now());
-        reservation.setReservationTime(LocalTime.now());
         return reservationRepository.save(reservation);
     }
 
