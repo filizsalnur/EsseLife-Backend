@@ -35,6 +35,9 @@ public class CustomerService {
 
         return customerRepository.save(existingCustomer);
     }
+    public Customer getCustomerByName(String name) {
+        return customerRepository.findByName(name);
+    }
 
     public void deleteCustomer(Long id) {
         customerRepository.deleteById(id);

@@ -1,8 +1,10 @@
 package esselife.backend.esselife.backend.entity.controller;
+import esselife.backend.esselife.backend.entity.Customer;
 import esselife.backend.esselife.backend.entity.Reservation;
 
 import esselife.backend.esselife.backend.entity.enums.Consultant;
 import esselife.backend.esselife.backend.entity.repository.ReservationRepository;
+import esselife.backend.esselife.backend.entity.service.CustomerService;
 import esselife.backend.esselife.backend.entity.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import java.util.List;
 public class ReservationController {
     private final ReservationRepository reservationRepository;
     private final ReservationService reservationService;
+    private final CustomerService customerService;
     @GetMapping
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
@@ -31,8 +34,20 @@ public class ReservationController {
     }
     @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
+        String customerName = reservation.getCustomerName();
+        Customer existingCustomer = customerService.getCustomerByName(customerName);
+
+        if (existingCustomer == null) {
+            // Müşteri yoksa yeni müşteri oluştur
+            Customer newCustomer = new Customer(customerName);
+            customerService.createCustomer(newCustomer);
+            reservation.setCustomer(newCustomer);
+        } else {
+            // Var olan müşteriye bağla
+            reservation.setCustomer(existingCustomer);
+        }
+
         Reservation createdReservation = reservationService.createReservation(reservation);
         return new ResponseEntity<>(createdReservation, HttpStatus.CREATED);
     }
-
 }
